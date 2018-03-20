@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Start Page</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <body>
+        <h1>RESTful para pr&eacute;stamos de equipos del LSI</h1>
+        
+        <h3>/prestamos/api</h3>
+        <ul>
+            <li>/usuario</li>
+            <li>/codigo</li>
+            <li>/equipo</li>
+            <li>/prestamo</li>
+        </ul>
+        <hr>
+        <ol>
+            <li>El usuario debe crear un perfil en su aplicación de Android</li>
+            <li>Antes de enviar los datos para su registro, debe escanear un codigo generado en la app de la tablet</li>
+            <li>El codigo de la tablet se genera llamando por GET a http://lsi.no-ip.org:7777/prestamos/api/codigo/new</li>
+            <li>Ese código debe usado en la URL cuando se da de alta el usuario por POST al http://lsi.no-ip.org:7777/prestamos/api/usuarios/edecaccaf0424ab1ae3c943d71cbe145 enviando el usuario como dato</li>
+            <ul>
+                <h4>Respuestas posibles</h4>
+                <li>El codigo ya ha sido validado anteriormente.</li>
+                <li>Usuario creado satisfactoriamente!</li>
+                <li>El código ingresado no existe.</li>
+            </ul>
+            <li>Una vez registrado, la app queda en modo lectura de codigo para escanear un código QR de un equipo</li>
+            <li>El codigo escaneado es el ID y la descripción del equipo</li>
+            <li>Una vez obtenido el id del equipo, se envia con el ID de usuario para generar el prestamo POST a http://localhost:8080/prestamos/api/prestamo enviando {"idAlumno":2,"idEquipo":4}</li>
+            <li>Cuando se devuelve un equipo, se debe escanear el código en la tablet enviando el ID a por GET http://localhost:8080/prestamos/api/prestamo/{id} </li>
+            <li>La tablet debe actualizar la lista de equipos prestados cada X tiempo</li>
+        </ol>
+        <hr>
+        <p>El metodo GET obtiene la lista de todos los elementos en la base <a href="http://lsi.no-ip.org:7777/prestamos/api/usuarios">http://lsi.no-ip.org:7777/prestamos/api/usuarios</a></p>
+        <p>El metodo GET con parametro obtiene el elemento con ese ID en la base <a href="http://lsi.no-ip.org:7777/prestamos/api/usuarios/2">http://lsi.no-ip.org:7777/prestamos/api/usuarios/{id}</a></p>
+        <p>El metodo GET /count obtiene la cantidad de todos los elementos en la base <a href="http://lsi.no-ip.org:7777/prestamos/api/usuarios/count">http://lsi.no-ip.org:7777/prestamos/api/usuarios/count</a></p>
+        <p>El metodo GET con dos parametros obtiene la lista de todos los elementos en la base con ID entre los valores dados <a href="http://lsi.no-ip.org:7777/prestamos/api/usuarios/2/5">http://lsi.no-ip.org:7777/prestamos/api/usuarios/{desde}/{hasta}</a></p>
+        <p>El metodo POST crea un elemento en la base. Se envía el objeto a crear.</p>
+        <p>El metodo PUT modifica un elemento en la base. Se envia el ID por parametro en la url /{id} y el objeto a modificar</p>
+        <p>El metodo DELETE elimina un elemento en la base. Se envia el ID por parametro en la url /{id}</p>
+        <hr>
+        <p>Para crear un nuevo codigo usar el GET a http://lsi.no-ip.org:7777/prestamos/api/codigo/new</p>
+        <p>Para buscar un código usar el GET enviando el codigo http://lsi.no-ip.org:7777/prestamos/api/codigo/find/5b411a37f1d84ae3b635ab2940c3c6d5</p>
+        <hr>
+        <p>Para registrar un nuevo usuario enviar el código por URL y los datos del usuario adjuntos por POST http://lsi.no-ip.org:7777/prestamos/api/usuario/6f270495e4754a6db5ae4b0c2fe2d556
+        {"legajo": "12322","nombre": "otro rest","rol": "ALUMNO","telefono": "3221"}</p>
+        
+        
+    </body>
+</html>
