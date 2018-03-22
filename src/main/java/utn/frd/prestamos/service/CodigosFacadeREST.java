@@ -18,7 +18,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import utn.frd.prestamos.Codigos;
+import utn.frd.prestamos.domain.Codigo;
 
 /**
  *
@@ -26,22 +26,22 @@ import utn.frd.prestamos.Codigos;
  */
 @Stateless
 @Path("codigo")
-public class CodigosFacadeREST extends AbstractFacade<Codigos> {
+public class CodigosFacadeREST extends AbstractFacade<Codigo> {
 
     @PersistenceContext(unitName = "utn.frd.prestamos_lsi_prestamos_war_1.0-SNAPSHOTPU")
     private EntityManager em;
 
     public CodigosFacadeREST() {
-        super(Codigos.class);
+        super(Codigo.class);
     }
 
     @GET
     @Path("/new")
-    @Produces({MediaType.TEXT_PLAIN})
-    public String newCodigo() {
-        Codigos codigo = new Codigos();
+    @Produces({MediaType.APPLICATION_JSON})
+    public Codigo newCodigo() {
+        Codigo codigo = new Codigo();
         super.create(codigo);
-        return codigo.getCodigo();
+        return codigo;
     }
 
     
@@ -52,14 +52,14 @@ public class CodigosFacadeREST extends AbstractFacade<Codigos> {
     @POST
     @Override
     @Consumes({MediaType.APPLICATION_JSON})
-    public void create(Codigos entity) {
+    public void create(Codigo entity) {
         super.create(entity);
     }
 
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Integer id, Codigos entity) {
+    public void edit(@PathParam("id") Integer id, Codigo entity) {
         super.edit(entity);
     }
 
@@ -72,28 +72,28 @@ public class CodigosFacadeREST extends AbstractFacade<Codigos> {
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Codigos find(@PathParam("id") Integer id) {
+    public Codigo find(@PathParam("id") Integer id) {
         return super.find(id);
     }
 
     @GET
     @Path("find/{codigo}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Codigos findByFechaValidado(@PathParam("codigo") String codigo) {
-        return em.createNamedQuery("Codigos.findByCodigo", Codigos.class).setParameter("codigo", codigo).getSingleResult();
+    public Codigo findByFechaValidado(@PathParam("codigo") String codigo) {
+        return em.createNamedQuery("Codigo.findByCodigo", Codigo.class).setParameter("codigo", codigo).getSingleResult();
     }
 
     @GET
     @Override
     @Produces({MediaType.APPLICATION_JSON})
-    public List<Codigos> findAll() {
+    public List<Codigo> findAll() {
         return super.findAll();
     }
 
     @GET
     @Path("{from}/{to}")
     @Produces({MediaType.APPLICATION_JSON})
-    public List<Codigos> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+    public List<Codigo> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
 

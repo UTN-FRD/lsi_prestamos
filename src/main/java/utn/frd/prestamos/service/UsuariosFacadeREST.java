@@ -20,8 +20,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import utn.frd.prestamos.Usuarios;
-import utn.frd.prestamos.Codigos;
+import utn.frd.prestamos.domain.Usuario;
+import utn.frd.prestamos.domain.Codigo;
 
 /**
  *
@@ -29,23 +29,23 @@ import utn.frd.prestamos.Codigos;
  */
 @Stateless
 @Path("usuarios")
-public class UsuariosFacadeREST extends AbstractFacade<Usuarios> {
+public class UsuariosFacadeREST extends AbstractFacade<Usuario> {
 
     @PersistenceContext(unitName = "utn.frd.prestamos_lsi_prestamos_war_1.0-SNAPSHOTPU")
     private EntityManager em;
 
     public UsuariosFacadeREST() {
-        super(Usuarios.class);
+        super(Usuario.class);
     }
 
     @POST
     @Path("{codigo}")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces(MediaType.TEXT_PLAIN)
-    public String create(@PathParam("codigo") String codigo, Usuarios entity) {
+    public String create(@PathParam("codigo") String codigo, Usuario entity) {
         String msg = "";
         try{
-            Codigos c = em.createNamedQuery("Codigos.findByCodigo", Codigos.class).setParameter("codigo", codigo).getSingleResult();
+            Codigo c = em.createNamedQuery("Codigo.findByCodigo", Codigo.class).setParameter("codigo", codigo).getSingleResult();
             if(c.getFechaValidado()!=null) return "El codigo ya ha sido validado anteriormente";
             c.setFechaValidado(new Date());
             em.merge(c);
@@ -64,7 +64,7 @@ public class UsuariosFacadeREST extends AbstractFacade<Usuarios> {
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Integer id, Usuarios entity) {
+    public void edit(@PathParam("id") Integer id, Usuario entity) {
         super.edit(entity);
     }
 
@@ -77,21 +77,21 @@ public class UsuariosFacadeREST extends AbstractFacade<Usuarios> {
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Usuarios find(@PathParam("id") Integer id) {
+    public Usuario find(@PathParam("id") Integer id) {
         return super.find(id);
     }
 
     @GET
     @Override
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Usuarios> findAll() {
+    public List<Usuario> findAll() {
         return super.findAll();
     }
 
     @GET
     @Path("{from}/{to}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Usuarios> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+    public List<Usuario> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
 

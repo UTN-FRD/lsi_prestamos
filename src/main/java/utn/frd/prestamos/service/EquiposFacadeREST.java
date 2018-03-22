@@ -18,7 +18,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import utn.frd.prestamos.Equipos;
+import utn.frd.prestamos.domain.Equipo;
 
 /**
  *
@@ -26,13 +26,13 @@ import utn.frd.prestamos.Equipos;
  */
 @Stateless
 @Path("equipo")
-public class EquiposFacadeREST extends AbstractFacade<Equipos> {
+public class EquiposFacadeREST extends AbstractFacade<Equipo> {
 
     @PersistenceContext(unitName = "utn.frd.prestamos_lsi_prestamos_war_1.0-SNAPSHOTPU")
     private EntityManager em;
 
     public EquiposFacadeREST() {
-        super(Equipos.class);
+        super(Equipo.class);
     }
 
     @GET
@@ -41,7 +41,7 @@ public class EquiposFacadeREST extends AbstractFacade<Equipos> {
     @Produces({MediaType.TEXT_PLAIN})
     public String findByEquipo(@PathParam("codigo") String codigo) {
         try{
-            Equipos e = em.createNamedQuery("Equipos.findByDetalle", Equipos.class).setParameter("detalle", codigo).getSingleResult();
+            Equipo e = em.createNamedQuery("Equipo.findByDetalle", Equipo.class).setParameter("detalle", codigo).getSingleResult();
             return ""+e.getId();
         }catch(Exception e){
             return "ERROR";
@@ -56,14 +56,14 @@ public class EquiposFacadeREST extends AbstractFacade<Equipos> {
     @POST
     @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void create(Equipos entity) {
+    public void create(Equipo entity) {
         super.create(entity);
     }
 
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Integer id, Equipos entity) {
+    public void edit(@PathParam("id") Integer id, Equipo entity) {
         super.edit(entity);
     }
 
@@ -76,21 +76,21 @@ public class EquiposFacadeREST extends AbstractFacade<Equipos> {
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Equipos find(@PathParam("id") Integer id) {
+    public Equipo find(@PathParam("id") Integer id) {
         return super.find(id);
     }
 
     @GET
     @Override
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Equipos> findAll() {
+    public List<Equipo> findAll() {
         return super.findAll();
     }
 
     @GET
     @Path("{from}/{to}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Equipos> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+    public List<Equipo> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
 
