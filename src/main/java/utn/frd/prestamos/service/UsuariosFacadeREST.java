@@ -22,6 +22,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import utn.frd.prestamos.domain.Usuario;
 import utn.frd.prestamos.domain.Codigo;
+import utn.frd.prestamos.service.bean.ResponseBean;
 
 /**
  *
@@ -41,29 +42,45 @@ public class UsuariosFacadeREST extends AbstractFacade<Usuario> {
     @POST
     @Path("{codigo}")
     @Consumes({MediaType.APPLICATION_JSON})
-    @Produces(MediaType.TEXT_PLAIN)
-    public String create(@PathParam("codigo") String codigo, Usuario entity) {
-        String msg = "";
+    @Produces(MediaType.APPLICATION_JSON)
+    public ResponseBean create(@PathParam("codigo") String codigo, Usuario entity) {
+        ResponseBean resp = new ResponseBean();
         try{
             Codigo c = em.createNamedQuery("Codigo.findByCodigo", Codigo.class).setParameter("codigo", codigo).getSingleResult();
-            if(c.getFechaValidado()!=null) return "El codigo ya ha sido validado anteriormente";
+            if(c.getFechaValidado()!=null){
+                resp.setCode("202");
+                resp.setMessage( "El codigo ya ha sido validado anteriormente" );
+                return resp;
+            }
             c.setFechaValidado(new Date());
             em.merge(c);
             entity.setHabilitado(true);
             entity.setFechaAlta(new Date());
             em.persist(entity);
-            msg = "Usuario creado satisfactoriamente!";
+            resp.setCode("200");
+            resp.setMessage( "Usuario creado satisfactoriamente!" );
+            resp.setObject( entity );
         }catch(NoResultException re){
-            msg = "El código ingresado no existe.";
+            resp.setCode("201");
+            resp.setMessage( "El código ingresado no existe." );
         }catch(Exception e){
-            msg = "Ocurrió un error.";
+            resp.setCode("500");
+            resp.setMessage( e.getMessage() );
         }
-        return msg;
+        return resp;
+    }
+    
+    @GET
+    @Override
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<Usuario> findAll() {
+        return super.findAll();
     }
 
+/*
     @PUT
     @Path("{id}")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
     public void edit(@PathParam("id") Integer id, Usuario entity) {
         super.edit(entity);
     }
@@ -76,21 +93,14 @@ public class UsuariosFacadeREST extends AbstractFacade<Usuario> {
 
     @GET
     @Path("{id}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
     public Usuario find(@PathParam("id") Integer id) {
         return super.find(id);
     }
 
     @GET
-    @Override
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Usuario> findAll() {
-        return super.findAll();
-    }
-
-    @GET
     @Path("{from}/{to}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
     public List<Usuario> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
@@ -101,7 +111,7 @@ public class UsuariosFacadeREST extends AbstractFacade<Usuario> {
     public String countREST() {
         return String.valueOf(super.count());
     }
-
+*/
     @Override
     protected EntityManager getEntityManager() {
         return em;

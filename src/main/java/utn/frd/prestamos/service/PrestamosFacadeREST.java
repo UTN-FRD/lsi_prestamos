@@ -24,6 +24,7 @@ import utn.frd.prestamos.domain.Equipo;
 import utn.frd.prestamos.domain.Prestamo;
 import utn.frd.prestamos.domain.Usuario;
 import utn.frd.prestamos.service.bean.PrestamoBean;
+import utn.frd.prestamos.service.bean.ResponseBean;
 
 /**
  *
@@ -53,16 +54,20 @@ public class PrestamosFacadeREST extends AbstractFacade<Prestamo> {
 
     @GET
     @Path("{idEquipo}")
-    @Produces({MediaType.TEXT_PLAIN})
-    public String devolver(@PathParam("idEquipo") Integer idEquipo) {
+    @Produces({MediaType.APPLICATION_JSON})
+    public ResponseBean devolver(@PathParam("idEquipo") Integer idEquipo) {
+        ResponseBean resp = new ResponseBean();
         try{
             Prestamo p = em.createNamedQuery("Prestamo.findEquipoPrestado", Prestamo.class).setParameter("idEquipo", idEquipo).getSingleResult();
             p.setFechaFin(new Date());
             super.edit(p);
-            return "Equipo devuelto!";
+            resp.setCode("200");
+            resp.setMessage("Equipo devuelto!");
         }catch(Exception e){
-            return "ERROR";
+            resp.setCode("500");
+            resp.setMessage(e.getMessage());
         }
+        return resp;
     }
 
     @GET

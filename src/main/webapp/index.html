@@ -19,7 +19,16 @@
             <li>El usuario debe crear un perfil en su aplicación de Android</li>
             <li>Antes de enviar los datos para su registro, debe escanear un codigo generado en la app de la tablet</li>
             <li>El codigo de la tablet se genera llamando por GET a http://lsi.no-ip.org:7777/prestamos/api/codigo/new</li>
-            <li>Ese código debe usado en la URL cuando se da de alta el usuario por POST al http://lsi.no-ip.org:7777/prestamos/api/usuarios/edecaccaf0424ab1ae3c943d71cbe145 enviando el usuario como dato</li>
+            <li>Ese código debe usado en la URL cuando se da de alta el usuario por POST al http://lsi.no-ip.org:7777/prestamos/api/usuarios/edecaccaf0424ab1ae3c943d71cbe145 enviando el usuario como dato
+                El objeto a enviar debe ser {"legajo":"123","nombre":"Pepe","telefono":"112233","rol":"Alumno"} y el resultado será un objeto que contiene codigo, mensaje y el objeto recientemente creado.
+                Los códigos pueden ser:
+                <ul>
+                    <li>200: Usuario creado</li>
+                    <li>201: El codigo ingresado no existe</li>
+                    <li>202: El código ya fue usado</li>
+                    <li>500: Error</li>
+                </ul>
+            </li>
             <ul>
                 <h4>Respuestas posibles</h4>
                 <li>El codigo ya ha sido validado anteriormente.</li>
@@ -28,9 +37,9 @@
             </ul>
             <li>Una vez registrado, la app queda en modo lectura de codigo para escanear un código QR de un equipo</li>
             <li>El codigo escaneado es el ID y la descripción del equipo</li>
-            <li>Una vez obtenido el id del equipo, se envia con el ID de usuario para generar el prestamo POST a http://localhost:8080/prestamos/api/prestamo enviando {"idAlumno":2,"idEquipo":4}</li>
+            <li>Una vez obtenido el id del equipo, se envia con el ID de usuario para generar el prestamo POST a http://localhost:8080/prestamos/api/prestamo enviando {"idUsuario":2,"idEquipo":4}</li>
             <li>Cuando se devuelve un equipo, se debe escanear el código en la tablet enviando el ID a por GET http://localhost:8080/prestamos/api/prestamo/{id} </li>
-            <li>La tablet debe actualizar la lista de equipos prestados cada X tiempo</li>
+            <li>La tablet debe actualizar la lista de equipos prestados cada X tiempo usando GET a http://localhost:8080/prestamos/api/prestamo</li>
         </ol>
         <hr>
         <p>El metodo GET obtiene la lista de todos los elementos en la base <a href="http://lsi.no-ip.org:7777/prestamos/api/usuarios">http://lsi.no-ip.org:7777/prestamos/api/usuarios</a></p>

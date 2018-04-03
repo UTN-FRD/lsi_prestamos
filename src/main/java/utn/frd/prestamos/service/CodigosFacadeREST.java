@@ -43,12 +43,7 @@ public class CodigosFacadeREST extends AbstractFacade<Codigo> {
         super.create(codigo);
         return codigo;
     }
-
-    
-    
-    
-    
-    
+/*
     @POST
     @Override
     @Consumes({MediaType.APPLICATION_JSON})
@@ -103,7 +98,7 @@ public class CodigosFacadeREST extends AbstractFacade<Codigo> {
     public String countREST() {
         return String.valueOf(super.count());
     }
-
+*/
     @Override
     protected EntityManager getEntityManager() {
         return em;
